@@ -1,18 +1,34 @@
 import { IPaymentStrategy } from "./ipayment-strategy.interface";
+
+/**
+ * Clase que representa el contexto para la ejecución de estrategias de pago.
+ * 
+ * Esta clase utiliza el patrón Strategy para permitir cambiar el algoritmo de pago
+ * en tiempo de ejecución, delegando la operación a una implementación concreta de `IPaymentStrategy`.
+ */
 export class PaymentContext {
-        // The Context has a reference to the Strategy object.
-        // The Context does not know the concrete class of a strategy. 
-        // It should work with all strategies via the Strategy interface.
-        private PaymentStrategy: IPaymentStrategy;
-        // The Client will set what PaymentStrategy to use by calling this method at runtime
-        public SetPaymentStrategy(strategy: IPaymentStrategy): void
-        {
-            this.PaymentStrategy = strategy;
-        }
-        // The Context delegates the work to the Strategy object instead of
-        // implementing multiple versions of the algorithm on its own.
-        public Pay(amount: number): boolean
-        {
-            return this.PaymentStrategy.Pay(amount);
-        }    
+    
+    /**
+     * Estrategia de pago actual utilizada por el contexto.
+     */
+    private PaymentStrategy: IPaymentStrategy;
+
+    /**
+     * Establece la estrategia de pago que se desea utilizar.
+     * 
+     * @param strategy Estrategia concreta que implementa `IPaymentStrategy`.
+     */
+    public SetPaymentStrategy(strategy: IPaymentStrategy): void {
+        this.PaymentStrategy = strategy;
+    }
+
+    /**
+     * Ejecuta el pago utilizando la estrategia previamente establecida.
+     * 
+     * @param amount Monto a pagar.
+     * @returns `true` si el pago fue exitoso.
+     */
+    public Pay(amount: number): boolean {
+        return this.PaymentStrategy.Pay(amount);
+    }
 }
