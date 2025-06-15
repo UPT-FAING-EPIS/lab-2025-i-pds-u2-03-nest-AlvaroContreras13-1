@@ -2,6 +2,11 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=19779730)
 # SESION DE LABORATORIO N° 03: PATRONES DE DISEÑO DE COMPORTAMIENTO
 
+Nombre: Alvaro Javier Contreras Lipa
+Link de documentacion de payment: https://upt-faing-epis.github.io/lab-2025-i-pds-u2-03-nest-AlvaroContreras13-1/payment/
+
+Link de documentacion de atm: https://upt-faing-epis.github.io/lab-2025-i-pds-u2-03-nest-AlvaroContreras13-1/atm/
+
 ## OBJETIVOS
   * Comprender el funcionamiento de algunos patrones de diseño de software del tipo de comportamiento.
 
