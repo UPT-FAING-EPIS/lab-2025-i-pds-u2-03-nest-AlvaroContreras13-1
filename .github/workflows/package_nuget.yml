@@ -1,4 +1,4 @@
-name: 🚦 Ejecutar pruebas, análisis y publicar paquete
+name: Ejecutar pruebas unitarias
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   run-tests:
-    name: 🧪 Pruebas unitarias - notifications y customer-app
+    name: Pruebas unitarias - atm y payment
     runs-on: ubuntu-latest
 
     steps:
@@ -22,26 +22,30 @@ jobs:
         with:
           node-version: 18
 
-      # 📦 Notificaciones
-      - name: 📦 Instalar dependencias - notifications
-        working-directory: notifications
+      # ========================
+      # 🔹 ATM
+      # ========================
+      - name: 📦 Instalar dependencias - atm
+        working-directory: atm
         run: npm ci
 
-      - name: 🧪 Ejecutar pruebas - notifications
-        working-directory: notifications
+      - name: 🧪 Ejecutar pruebas - atm
+        working-directory: atm
         run: npm run test:cov
 
-      # 📦 Customer App
-      - name: 📦 Instalar dependencias - customer-app
-        working-directory: customer-app
+      # ========================
+      # 🔹 Payment
+      # ========================
+      - name: 📦 Instalar dependencias - payment
+        working-directory: payment
         run: npm ci
 
-      - name: 🧪 Ejecutar pruebas - customer-app
-        working-directory: customer-app
+      - name: 🧪 Ejecutar pruebas - payment
+        working-directory: payment
         run: npm run test:cov
 
   sonar-analysis:
-    name: ☁️ Análisis con SonarCloud
+    name: Análisis con SonarCloud
     runs-on: ubuntu-latest
     needs: run-tests
 
@@ -54,12 +58,12 @@ jobs:
         with:
           node-version: 18
 
-      - name: 📦 Instalar dependencias - notifications
-        working-directory: notifications
+      - name: 📦 Instalar dependencias - atm
+        working-directory: atm
         run: npm ci
 
-      - name: 📦 Instalar dependencias - customer-app
-        working-directory: customer-app
+      - name: 📦 Instalar dependencias - payment
+        working-directory: payment
         run: npm ci
 
       - name: ☁️ Análisis SonarCloud conjunto (mono-repo)
@@ -67,16 +71,16 @@ jobs:
         with:
           projectBaseDir: .
           args: >
-            -Dsonar.projectKey=alvarocontreras13_2lab3
+            -Dsonar.projectKey=alvarocontreras13_2lab2
             -Dsonar.organization=alvarocontreras13
-            -Dsonar.sources=notifications/libs/domain/src,customer-app/libs/domain/src
-            -Dsonar.javascript.lcov.reportPaths=notifications/coverage/lcov.info,customer-app/coverage/lcov.info
+            -Dsonar.sources=atm/libs/domain/src,payment/libs/domain/src
+            -Dsonar.javascript.lcov.reportPaths=atm/coverage/lcov.info,payment/coverage/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
 
   npm-publish:
-    name: 📦 Publicar paquete en GitHub Packages
+    name: Publicar paquete en GitHub Packages
     runs-on: ubuntu-latest
     needs: sonar-analysis
 
@@ -96,19 +100,19 @@ jobs:
           scope: '@${{ github.repository_owner }}'
 
       - name: 📦 Instalar dependencias del paquete
-        working-directory: notifications
+        working-directory: payment
         run: npm ci
 
       - name: 🔄 Incrementar versión con timestamp único
-        working-directory: notifications/libs/domain
+        working-directory: payment/libs/domain
         run: |
           VERSION="1.0.$(date +%s)"
           npm version "$VERSION" --no-git-tag-version
           echo "📦 Versión generada: $VERSION"
           cat package.json
 
-      - name: 🚀 Publicar en GitHub Packages (npm)
-        working-directory: notifications/libs/domain
+      - name: 🚀 Publicar en GitHub Packages (npm, no nuget)
+        working-directory: payment/libs/domain
         run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

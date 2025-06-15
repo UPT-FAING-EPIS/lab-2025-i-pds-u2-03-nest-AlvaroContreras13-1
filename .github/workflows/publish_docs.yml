@@ -21,31 +21,31 @@ jobs:
         with:
           node-version: '18'
 
-      # 📚 Generar documentación para notifications
-      - name: 📦 Instalar dependencias - notifications
-        working-directory: notifications
+      # 📚 Generar documentación para atm
+      - name: 📦 Instalar dependencias - atm
+        working-directory: atm
         run: npm ci
 
-      - name: 🧾 Generar documentación - notifications
-        working-directory: notifications
+      - name: 🧾 Generar documentación - atm
+        working-directory: atm
         run: npx compodoc -p tsconfig.json -d documentation
 
-      # 📚 Generar documentación para customer-app
-      - name: 📦 Instalar dependencias - customer-app
-        working-directory: customer-app
+      # 📚 Generar documentación para payment
+      - name: 📦 Instalar dependencias - payment
+        working-directory: payment
         run: npm ci
 
-      - name: 🧾 Generar documentación - customer-app
-        working-directory: customer-app
+      - name: 🧾 Generar documentación - payment
+        working-directory: payment
         run: npx compodoc -p tsconfig.json -d documentation
 
       # 🗂️ Unir documentación en una carpeta
       - name: 🗃️ Preparar documentación combinada
         run: |
-          mkdir -p combined-docs/notifications
-          mkdir -p combined-docs/customer-app
-          cp -r notifications/documentation/* combined-docs/notifications
-          cp -r customer-app/documentation/* combined-docs/customer-app
+          mkdir -p combined-docs/atm
+          mkdir -p combined-docs/payment
+          cp -r atm/documentation/* combined-docs/atm
+          cp -r payment/documentation/* combined-docs/payment
 
       # 🚀 Publicar en GitHub Pages
       - name: 🌐 Deploy en GitHub Pages
